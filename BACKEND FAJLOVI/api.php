@@ -6,7 +6,7 @@ require_once 'dbconnect.php';
 //an array to display response
 $response = array();
 
-//if it is an api call?
+//if it is an api call
 if(isset($_GET['apicall'])){
 
 	switch($_GET['apicall']){
@@ -31,7 +31,7 @@ if(isset($_GET['apicall'])){
 
  			//if the verification code already exist and there is android ID paired with it 
 			if($stmt->num_rows > 0){
-				if($androidID==0){
+				if($androidID == NULL){
 					//if user is new and code is not used 
 					$stmt = $con->prepare("UPDATE verifikacijakorisnika SET androidID = ? WHERE kod = ?");
 					$stmt->bind_param("ss", $androidIDDB, $kod);
@@ -77,7 +77,7 @@ if(isset($_GET['apicall'])){
 
  			//if the devise exist with given pair 
 			if($stmt->num_rows > 0){
-				$response = 'VALIDATION SUCCESSFULL - 200 OK'; 
+				echo 'VALIDATION SUCCESSFULL - 200 OK'; 
 			}
 			else{
  				//if the user not found 

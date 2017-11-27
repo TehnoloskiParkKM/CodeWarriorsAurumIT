@@ -76,18 +76,6 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
                 unesiKod = (EditText)findViewById(R.id.unesi_kod_polje);
                 boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                 String networkStatus = isNetworkAvailable ? "ukljucena" : "iskljucena";
-
-                if (cd.isConnected()){ //Ispitivanje da li je promenljiva networkStatus jednaka vrednosti ukljucena
-                    unesiKod.setEnabled(true);//Ako jeste moguce je kucanje
-                    btn.setEnabled(true);//Ako jeste moguc je klik na dugme
-                    unesiKod.setText("");//Ako jeste vratiti na pocetak inputa
-                }else
-                {
-                    unesiKod.setEnabled(false);//Ako nije onemoguciti input polje
-                    btn.setEnabled(false);//Ako nije onemoguciti dugme
-                    unesiKod.setError("Ukljucite internet konekciju");//Ako nije postaviti gresku "Ukljucite internet konekciju"
-                    unesiKod.setText("");//Ako nije vratiti na pocetak inputa
-                }
             }
         }, intentFilter);
 
@@ -101,56 +89,17 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
     }
 
     @Override
-    public void processFinish(String result) { //Metoda u cijem argumentu se upisuje povratna poruka iz Baze
-        if (result.equals("Code already used! 401 UNAUTHORISED[]")){//Isputuje da li kod vec postoji
-            Toast.makeText(Screen2.this, "Kod je vec koriscen! 401 UNAUTHORISED", Toast.LENGTH_LONG).show();//Izbacuje poruku da vec postoji upisan telefon sa tim kodom, Kod je vec koriscen! 401 UNAUTHORISED
-        }
-        if (result.equals("200 OK[]")){//Ispituje da li unosi kod u bazu
-            Toast.makeText(Screen2.this, "Vasi podaci su uspesno dodati. Dobrodosli!", Toast.LENGTH_LONG).show();//Izbacuje poruku Vasi podaci su uspesno dodati. Dobrodosli!
-            EditText minimalniUnos = (EditText) findViewById(R.id.unesi_kod_polje); //Objekat minimalniUnos
-            String minUnos = minimalniUnos.getText().toString();//Objekat minUnos u koji upisujemo unesenu vrednost
-            SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);   /**stvaranje objekta za deljene preference*/
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            //Hesiranje
-            try {
-                MessageDigest m = MessageDigest.getInstance("MD5");
-                m.reset();
-                m.update(minUnos.getBytes());
-                byte[] digest = m.digest();
-                BigInteger bigInt = new BigInteger(1,digest);
-                String hashtext = bigInt.toString(16);
-                // Now we need to zero pad it if you actually want the full 32 chars.
-                while(hashtext.length() < 32 ){
-                    hashtext = "0"+ hashtext;
-                }
-                editor.putString("verifikacioniKod", hashtext);
-                editor.apply();
-
-                Intent intent = new Intent(Screen2.this, Screen3.class);
-                startActivity(intent);
-                finish();
-
-                Toast.makeText(Screen2.this, "Vas verifikacioni kod je upamcen!", Toast.LENGTH_SHORT).show();
-            } catch (java.security.NoSuchAlgorithmException e) {
-                e.getMessage();
-            }
-            //kraj hesiranja
-            Intent intent = new Intent(Screen2.this, Screen3.class);//Ako su podaci uspesno dodati Prebacuje na kameru
-            startActivity(intent);
-        }
-        if (result.equals("BAD PARAMETERS! 401 UNAUTHORISED[]")){//Ispituje da li su svi podaci tu
-            Toast.makeText(Screen2.this, "Vasi podaci nisu potpuni", Toast.LENGTH_SHORT).show();//Izbacuje poruku da Vasi podaci nisu potpuni i da nesto aplikacija nije ocitala
-        }
-
-    }//kraj processFinish metode
-
-    @Override
     public void onClick(View v) {
         EditText minimalniUnos = (EditText) findViewById(R.id.unesi_kod_polje); //Objekat minimalniUnos
         String minUnos = minimalniUnos.getText().toString();//Objekat minUnos u koji upisujemo unesenu vrednost
 
         String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID); //Uzimanje android ID-a
 
+        cd=new ConnectionDetector(this);
+        if(!cd.isConnected()){
+            minimalniUnos.setError("Nema internet konekcije!");
+            minimalniUnos.setText("");
+        }else{
 
             if (minimalniUnos.getText().toString().length()<3){ //Uslov da kod mora da sadrzi minimum 3 cifre
                 minimalniUnos.setError("Kod mora da sadrzi najmanje 3 cifre!");
@@ -176,15 +125,98 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
                     postData.put("androidID", androidID);//Prosledjujes Apiju androidID-a
 
                     PostResponseAsyncTask task = new PostResponseAsyncTask(Screen2.this,postData, Screen2.this);//Putanja za lokalni server
-                    task.execute("http://10.0.2.2/CodeWorriors/api.php?apicall=registration");//Putanja za lokalni server
-                    minimalniUnos.setText("");
+                    task.execute("http://10.0.2.2/CodeWorriors/api.php?apicall=validation");//Putanja za lokalni server
                 } else {
                     minimalniUnos.setError("Vas kod ne odgovara kodu po modulu 97");
                     minimalniUnos.setText("");
                 }
         }
 
-    }//Kraj onClick metode.
+    }}//Kraj onClick metode.
+
+    @Override
+    public void processFinish(String result) { //Metoda u cijem argumentu se upisuje povratna poruka iz Baze
+        EditText minimalniUnos = (EditText) findViewById(R.id.unesi_kod_polje); //Objekat minimalniUnos
+        String minUnos = minimalniUnos.getText().toString();//Objekat minUnos u koji upisujemo unesenu vrednost
+        SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);   /**stvaranje objekta za deljene preference*/
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (result.equals("VALIDATION SUCCESSFULL - 200 OK[]")){
+            Toast.makeText(Screen2.this, "Uspesno ste se ulogovali.", Toast.LENGTH_LONG).show();//Izbacuje poruku da vec postoji upisan telefon sa tim kodom, Kod je vec koriscen! 401 UNAUTHORISED
+            //Hesiranje
+            try {
+                MessageDigest m = MessageDigest.getInstance("MD5");
+                m.reset();
+                m.update(minUnos.getBytes());
+                byte[] digest = m.digest();
+                BigInteger bigInt = new BigInteger(1,digest);
+                String hashtext = bigInt.toString(16);
+                // Now we need to zero pad it if you actually want the full 32 chars.
+                while(hashtext.length() < 32 ){
+                    hashtext = "0"+ hashtext;
+                }
+                editor.putString("verifikacioniKod", hashtext);
+                editor.apply();
+
+                Intent intent = new Intent(Screen2.this, Screen3.class);
+                startActivity(intent);
+                finish();
+
+                //  Toast.makeText(Screen2.this, "Vas verifikacioni kod je upamcen!", Toast.LENGTH_SHORT).show();
+            } catch (java.security.NoSuchAlgorithmException e) {
+                e.getMessage();
+            }
+            //kraj hesiranja
+            Intent intent = new Intent(Screen2.this, Screen3.class);//Ako su podaci uspesno dodati Prebacuje na kameru
+            startActivity(intent);
+        } else if (result.equals("VALIDATION UNSUCCESSFULL - 401 UNAUTHORISED[]") || result.equals("BAD PARAMETERS! 401 UNAUTHORISED[]")){
+            String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID); //Uzimanje android ID-a
+            HashMap postData = new HashMap();//HashMapa, upisivanje vrednosti
+            postData.put("mobile", "android");//Govoris APIJU da se radi o telefonu i da je android
+            postData.put("kod", minimalniUnos.getText().toString());//Prosledjujes  Apiju vrednost koju korisnik unese
+            postData.put("androidID", androidID);//Prosledjujes Apiju androidID-a
+
+            PostResponseAsyncTask task = new PostResponseAsyncTask(Screen2.this,postData, Screen2.this);//Putanja za lokalni server
+            task.execute("http://10.0.2.2/CodeWorriors/api.php?apicall=registration");//Putanja za lokalni server
+            minimalniUnos.setText("");
+        } else if (result.equals("200 OK[]")){//Isputuje da li kod vec postoji
+            Toast.makeText(Screen2.this, "Uspesno ste dodati.", Toast.LENGTH_LONG).show();//Izbacuje poruku da vec postoji upisan telefon sa tim kodom, Kod je vec koriscen! 401 UNAUTHORISED
+            //Hesiranje
+            try {
+                MessageDigest m = MessageDigest.getInstance("MD5");
+                m.reset();
+                m.update(minUnos.getBytes());
+                byte[] digest = m.digest();
+                BigInteger bigInt = new BigInteger(1,digest);
+                String hashtext = bigInt.toString(16);
+                // Now we need to zero pad it if you actually want the full 32 chars.
+                while(hashtext.length() < 32 ){
+                    hashtext = "0" + hashtext;
+                }
+                editor.putString("verifikacioniKod", hashtext);
+                editor.apply();
+
+                Intent intent = new Intent(Screen2.this, Screen3.class);
+                startActivity(intent);
+                finish();
+
+               //  Toast.makeText(Screen2.this, "Vas verifikacioni kod je upamcen!", Toast.LENGTH_SHORT).show();
+            } catch (java.security.NoSuchAlgorithmException e) {
+                e.getMessage();
+            }
+            //kraj hesiranja
+            Intent intent = new Intent(Screen2.this, Screen3.class);//Ako su podaci uspesno dodati Prebacuje na kameru
+            startActivity(intent);
+        }
+        else if (result.equals(("Code already used! 401 UNAUTHORISED[]")) || result.equals("BAD PARAMETERS! 401 UNAUTHORISED[]")){//Ispituje da li unosi kod u bazu
+            Toast.makeText(Screen2.this, "Kod je vec poseduje drugi korisnik", Toast.LENGTH_SHORT).show();
+        }
+
+        else{
+            Toast.makeText(Screen2.this, "nesto" , Toast.LENGTH_SHORT).show();
+        }
+
+
+    }//kraj processFinish metode
 
 }
 
