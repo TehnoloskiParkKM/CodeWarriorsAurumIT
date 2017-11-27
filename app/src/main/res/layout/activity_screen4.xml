@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.snapit.milosvuckovic.splashscreenv2.Screen4"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
+        <ImageView
+            android:id="@+id/yourlogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:src="@mipmap/snapit_white" />
+
+    </android.support.v7.widget.Toolbar>
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="5dp">
+
+        <!-- **** Place Your Content Here **** -->
+
+        <View android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/toolbar_dropshadow"/>
+
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/img2"
+            />
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <Button
+            android:id="@+id/posalji_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:backgroundTint="#F9CB45"
+            android:fontFamily="@font/roboto"
+            android:text="POŠALJI"
+            android:textColor="@android:color/background_light"
+            android:textSize="15sp"
+            android:layout_marginLeft="50dp"/>
+
+
+
+        <Button
+            android:id="@+id/posalji_btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:backgroundTint="#F9CB45"
+            android:fontFamily="@font/roboto"
+            android:text="PONIŠTI"
+            android:textColor="@android:color/background_light"
+            android:textSize="15sp"
+            android:onClick="onClickClose"
+            android:layout_marginRight="50dp"/>
+</LinearLayout>
+
+</LinearLayout>
