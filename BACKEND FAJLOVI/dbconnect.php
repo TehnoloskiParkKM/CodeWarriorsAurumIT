@@ -2,8 +2,8 @@
 // database connection variables
 $servername = "localhost";
 $username = "root";
-$password = "";
-$database = "snapit";
+$password = "Aurumit$987";
+$database = "cw";
 
 
 // Connecting to mysqli database

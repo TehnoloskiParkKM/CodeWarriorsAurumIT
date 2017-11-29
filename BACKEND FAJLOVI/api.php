@@ -3,8 +3,8 @@
 //getting the database conection
 require_once 'dbconnect.php';
 
-//an array to display response/
-$response = array();
+//an array to display response
+//$response = array();
 
 //if it is an api call
 if(isset($_GET['apicall'])){
@@ -101,7 +101,7 @@ else{
 }
 
  //displaying the response in json structure 
-echo json_encode($response);
+//echo json_encode($response);
 
 //function validating all the paramters are available 
 function isTheseParametersAvailable($params){
