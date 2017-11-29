@@ -3,7 +3,7 @@
 //getting the database conection
 require_once 'dbconnect.php';
 
-//an array to display response
+//an array to display response/
 $response = array();
 
 //if it is an api call
