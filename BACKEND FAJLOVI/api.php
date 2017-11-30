@@ -1,10 +1,10 @@
 <?php 
-
+//Guthub proba
 //getting the database conection
 require_once 'dbconnect.php';
 
 //an array to display response
-$response = array();
+//$response = array();
 
 //if it is an api call
 if(isset($_GET['apicall'])){
@@ -61,7 +61,7 @@ if(isset($_GET['apicall'])){
 
 		case 'validation':
 
- 		//for checking if device is registered we need the verification code and android ID 
+ 		//checking if device is registered we need the verification code and android ID 
 		if(isTheseParametersAvailable(array('kod', 'androidID'))){
  			//getting values 
 			$kod = md5($_POST['kod']); 
@@ -90,9 +90,58 @@ if(isset($_GET['apicall'])){
 
 		break; 
 
-		default: 
-		echo 'Invalid Operation Called - 401 UNAUTHORISED';
+		case 'imageupload':
+
+		//checking the parameters required are available or not 
+		if(isTheseParametersAvailable(array('kod','androidID', 'image', 'image_name'))){
+			//getting values
+			$kod = md5($_POST['kod']); 
+			$upload_folder = 'http://79.175.125.13/cw/slike'; //drugo moguce resenje /var/www/html/cw/slike
+			$image = $_POST['image'];
+			$image_name = $_POST['image_name'];
+			$androidID = $_POST['androidID'];
+			$path = '$upload_folder/$image_name.jpeg'; 
+
+			$stmt = $con->prepare("SELECT androidID FROM verifikacijakorisnika WHERE kod = ? AND androidID = ?");
+			$stmt->bind_param("ss",$kod, $androidID);
+			$stmt->execute();
+			$stmt->store_result();
+
+ 			//if the devise exist with given pair 
+			if($stmt->num_rows > 0){
+				//image decoding
+				if(file_put_contents($path, base64_decode($image) != false){  
+					$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
+					$stmt->bind_param('sss', $androidID, $image_name, $path);
+
+					//if storing DB is successfull
+					if($stmt->execute()){
+						echo 'UPLOAD SUCCESSFULL';
+					}
+					else{
+						echo 'UPLOAD FAILED';
+					}
+				}
+				//if base64_decode($image) == false
+				else{
+					echo 'BAD DECODING - UPLOAD FAILED';
+				} 
+			}
+			else{
+ 				//if the user not found 
+				echo 'VALIDATION UNSUCCESSFULL - 401 UNAUTHORISED';
+			}
+		}
+		else{
+			echo 'BAD PARAMETERS! 401 UNAUTHORISED';
+		}
 	}
+
+	break;
+
+	default: 
+	echo 'Invalid Operation Called - 401 UNAUTHORISED';
+}
 
 }
 else{
@@ -101,7 +150,7 @@ else{
 }
 
  //displaying the response in json structure 
-echo json_encode($response);
+//echo json_encode($response);
 
 //function validating all the paramters are available 
 function isTheseParametersAvailable($params){
