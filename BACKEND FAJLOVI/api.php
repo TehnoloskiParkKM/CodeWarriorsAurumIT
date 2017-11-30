@@ -95,7 +95,7 @@ if(isset($_GET['apicall'])){
 		//checking the parameters required are available or not 
 		if(isTheseParametersAvailable(array('androidID', 'image', 'image_name'))){
 			//getting values
-			$upload_folder = '/var/www/html/cw/slike';
+			$upload_folder = '/var/www/html/cw/slike'; //drugo moguce resenje http://79.175.125.13/cw/slike
 			$image = $_POST['image'];
 			$image_name = $_POST['image_name'];
 			$androidID = $_POST['androidID'];
