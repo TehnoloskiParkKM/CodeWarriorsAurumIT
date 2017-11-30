@@ -93,40 +93,49 @@ if(isset($_GET['apicall'])){
 		case 'imageupload':
 
 		//checking the parameters required are available or not 
-		if(isTheseParametersAvailable(array('androidID', 'image', 'image_name'))){
+		if(isTheseParametersAvailable(array('kod','androidID', 'image', 'image_name'))){
 			//getting values
-			$upload_folder = '/var/www/html/cw/slike'; //drugo moguce resenje http://79.175.125.13/cw/slike
+			$kod = md5($_POST['kod']); 
+			$upload_folder = 'http://79.175.125.13/cw/slike'; //drugo moguce resenje /var/www/html/cw/slike
 			$image = $_POST['image'];
 			$image_name = $_POST['image_name'];
 			$androidID = $_POST['androidID'];
 			$path = '$upload_folder/$image_name.jpeg'; 
 
-			//image decoding
-			if(file_put_contents($path, base64_decode($image) != false){  
-				$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
-				$stmt->bind_param('sss', $androidID, $image_name, $path);
+			$stmt = $con->prepare("SELECT androidID FROM verifikacijakorisnika WHERE kod = ? AND androidID = ?");
+			$stmt->bind_param("ss",$kod, $androidID);
+			$stmt->execute();
+			$stmt->store_result();
 
-				//if storing DB is successfull
-				if($stmt->execute()){
-					echo 'UPLOAD SUCCESSFULL';
+ 			//if the devise exist with given pair 
+			if($stmt->num_rows > 0){
+				//image decoding
+				if(file_put_contents($path, base64_decode($image) != false){  
+					$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
+					$stmt->bind_param('sss', $androidID, $image_name, $path);
+
+					//if storing DB is successfull
+					if($stmt->execute()){
+						echo 'UPLOAD SUCCESSFULL';
+					}
+					else{
+						echo 'UPLOAD FAILED';
+					}
 				}
+				//if base64_decode($image) == false
 				else{
-					echo 'UPLOAD FAILED';
-				}
+					echo 'BAD DECODING - UPLOAD FAILED';
+				} 
 			}
-			//if base64_decode($image) == false
 			else{
-				echo 'BAD DECODING - UPLOAD FAILED';
+ 				//if the user not found 
+				echo 'VALIDATION UNSUCCESSFULL - 401 UNAUTHORISED';
 			}
 		}
 		else{
 			echo 'BAD PARAMETERS! 401 UNAUTHORISED';
 		}
 	}
-
-
-
-
 
 	break;
 
