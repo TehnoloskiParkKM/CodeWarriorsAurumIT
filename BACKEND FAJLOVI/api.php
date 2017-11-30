@@ -61,7 +61,7 @@ if(isset($_GET['apicall'])){
 
 		case 'validation':
 
- 		//for checking if device is registered we need the verification code and android ID 
+ 		//checking if device is registered we need the verification code and android ID 
 		if(isTheseParametersAvailable(array('kod', 'androidID'))){
  			//getting values 
 			$kod = md5($_POST['kod']); 
@@ -90,9 +90,49 @@ if(isset($_GET['apicall'])){
 
 		break; 
 
-		default: 
-		echo 'Invalid Operation Called - 401 UNAUTHORISED';
+		case 'imageupload':
+
+		//checking the parameters required are available or not 
+		if(isTheseParametersAvailable(array('androidID', 'image', 'image_name'))){
+			//getting values
+			$upload_folder = '/var/www/html/cw/slike';
+			$image = $_POST['image'];
+			$image_name = $_POST['image_name'];
+			$androidID = $_POST['androidID'];
+			$path = '$upload_folder/$image_name.jpeg'; 
+
+			//image decoding
+			if(file_put_contents($path, base64_decode($image) != false){  
+				$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
+				$stmt->bind_param('sss', $androidID, $image_name, $path);
+
+				//if storing DB is successfull
+				if($stmt->execute()){
+					echo 'UPLOAD SUCCESSFULL';
+				}
+				else{
+					echo 'UPLOAD FAILED';
+				}
+			}
+			//if base64_decode($image) == false
+			else{
+				echo 'BAD DECODING - UPLOAD FAILED';
+			}
+		}
+		else{
+			echo 'BAD PARAMETERS! 401 UNAUTHORISED';
+		}
 	}
+
+
+
+
+
+	break;
+
+	default: 
+	echo 'Invalid Operation Called - 401 UNAUTHORISED';
+}
 
 }
 else{

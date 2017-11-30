@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CodeWarriors.iml" filepath="$PROJECT_DIR$/CodeWarriors.iml" />
+      <module fileurl="file://D:\wamp64\www\snapitapp\CodeWarriorsAurumIT\CodeWarriors.iml" filepath="D:\wamp64\www\snapitapp\CodeWarriorsAurumIT\CodeWarriors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CodeWarriorsAurumIT.iml" filepath="$PROJECT_DIR$/CodeWarriorsAurumIT.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\wamp64\www\snapitapp\CodeWarriorsAurumIT\app\app.iml" filepath="D:\wamp64\www\snapitapp\CodeWarriorsAurumIT\app\app.iml" />
     </modules>
   </component>
 </project>
