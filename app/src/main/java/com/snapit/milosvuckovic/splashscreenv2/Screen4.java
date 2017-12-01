@@ -101,7 +101,7 @@ public class Screen4 extends AppCompatActivity {
 
                             }else{
                                 Toast.makeText(getApplicationContext(),
-                                        "Problem sa slanjem slike!", Toast.LENGTH_SHORT).show();
+                                        "Problem sa slanjem slike!" + s, Toast.LENGTH_SHORT).show();
                             }
 
                         }
