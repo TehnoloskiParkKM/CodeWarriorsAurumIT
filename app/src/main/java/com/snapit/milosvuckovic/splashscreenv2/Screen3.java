@@ -259,7 +259,7 @@ public class Screen3 extends AppCompatActivity {
     //Add the getPictureFile() method:
     private File getPictureFile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss"). format(System.currentTimeMillis());
-        String fileName = "PHOTO_" + timeStamp + ".jpg";
+        String fileName = "PHOTO_" + timeStamp + ".jpeg";
         return new File(getCacheDir(), fileName);
     }
     //Rotacija slike za 90 stepeni ako je potrebno

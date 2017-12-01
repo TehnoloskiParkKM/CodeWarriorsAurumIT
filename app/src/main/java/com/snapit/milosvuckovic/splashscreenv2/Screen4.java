@@ -61,6 +61,8 @@ public class Screen4 extends AppCompatActivity {
         imageView.setImageURI(uri);
         pAttacher = new PhotoViewAttacher(imageView);
         pAttacher.update();
+        File traziIme = new File(KomprePutanja);
+        final String imeSlike= traziIme.getName();
 
 
         upload.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +75,8 @@ public class Screen4 extends AppCompatActivity {
                     String verifikacioniKod= sharedPreferences.getString("verifikacioniKod",""); //Citanje verifikacionog koda iz shared preferences
 
                     //Uzimanje naziva slike iz screen3
-                    Intent intent = getIntent();
-
-                    String nazivSlike = "stagod";
+                   // Intent intent = getIntent();
+                   // String nazivSlike = intent.getExtras().getString("nazivS");
 
                     Bitmap bitMap= ImageLoader.init().from(KomprePutanja).requestSize(512,512).getBitmap();//Uzimanje slike iz kesa i upis u bitMap
                     String slikaZaSlanje= ImageBase64.encode(bitMap); //kodovanje slike u String
@@ -83,13 +84,15 @@ public class Screen4 extends AppCompatActivity {
 
                     HashMap<String, String> postData=new HashMap<String, String>();
                     postData.put("image", slikaZaSlanje);
-                    postData.put("image_name", nazivSlike);
+                    postData.put("image_name", imeSlike);
                     postData.put("androidID",androidID);
                     postData.put("kod", verifikacioniKod);
 
                     PostResponseAsyncTask task=new PostResponseAsyncTask(Screen4.this, postData, new AsyncResponse(){
                         @Override
                         public void processFinish(String s) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);
+                            String verifikacioniKod= sharedPreferences.getString("verifikacioniKod","");
                             if(s.contains("UPLOAD SUCCESSFULL!")){
                                 Toast.makeText(getApplicationContext(),
                                         "Slika je uspesno poslata na server!", Toast.LENGTH_SHORT).show();
@@ -98,7 +101,7 @@ public class Screen4 extends AppCompatActivity {
 
                             }else{
                                 Toast.makeText(getApplicationContext(),
-                                        "Problem sa slanjem slike!"+ s, Toast.LENGTH_SHORT).show();
+                                        "Problem sa slanjem slike!", Toast.LENGTH_SHORT).show();
                             }
 
                         }
