@@ -1,5 +1,5 @@
 <?php 
-//Guthub proba
+
 //getting the database conection
 require_once 'dbconnect.php';
 
@@ -61,7 +61,7 @@ if(isset($_GET['apicall'])){
 
 		case 'validation':
 
- 		//checking if device is registered we need the verification code and android ID 
+ 		//for checking if device is registered we need the verification code and android ID 
 		if(isTheseParametersAvailable(array('kod', 'androidID'))){
  			//getting values 
 			$kod = md5($_POST['kod']); 
@@ -90,9 +90,8 @@ if(isset($_GET['apicall'])){
 
 		break; 
 
-		case 'imageupload':
+		case 'imgupload':
 
-		//checking the parameters required are available or not 
 		if(isTheseParametersAvailable(array('kod','androidID', 'image', 'image_name'))){
 			//getting values
 			$kod = md5($_POST['kod']); 
@@ -107,10 +106,8 @@ if(isset($_GET['apicall'])){
 			$stmt->execute();
 			$stmt->store_result();
 
- 			//if the devise exist with given pair 
 			if($stmt->num_rows > 0){
-				//image decoding
-				if(file_put_contents($path, base64_decode($image) != false){  
+				if (file_put_contents($path, base64_decode($image)) != false){
 					$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
 					$stmt->bind_param('sss', $androidID, $image_name, $path);
 
@@ -122,26 +119,25 @@ if(isset($_GET['apicall'])){
 						echo 'UPLOAD FAILED';
 					}
 				}
-				//if base64_decode($image) == false
 				else{
-					echo 'BAD DECODING - UPLOAD FAILED';
-				} 
+					//could not store image file_put_contents==false
+					echo 'BAD FOLDER WRITTING - UPLOAD FAILED';
+				}
 			}
 			else{
- 				//if the user not found 
+				//if the user not found 
 				echo 'VALIDATION UNSUCCESSFULL - 401 UNAUTHORISED';
 			}
 		}
 		else{
 			echo 'BAD PARAMETERS! 401 UNAUTHORISED';
 		}
+
+		break; 
+
+		default: 
+		echo 'Invalid Operation Called - 401 UNAUTHORISED';
 	}
-
-	break;
-
-	default: 
-	echo 'Invalid Operation Called - 401 UNAUTHORISED';
-}
 
 }
 else{
