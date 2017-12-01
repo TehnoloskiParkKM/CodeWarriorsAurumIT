@@ -125,7 +125,7 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
                     postData.put("androidID", androidID);//Prosledjujes Apiju androidID-a
 
                     PostResponseAsyncTask task = new PostResponseAsyncTask(Screen2.this,postData, Screen2.this);//Putanja za lokalni server
-                    task.execute("http://10.0.2.2/CodeWorriors/api.php?apicall=validation");//Putanja za lokalni server
+                    task.execute("http://79.175.125.13/cw/api.php?apicall=validation");//Putanja za lokalni server
                 } else {
                     minimalniUnos.setError("Vas kod ne odgovara kodu po modulu 97");
                     minimalniUnos.setText("");
@@ -140,7 +140,7 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
         String minUnos = minimalniUnos.getText().toString();//Objekat minUnos u koji upisujemo unesenu vrednost
         SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);   /**stvaranje objekta za deljene preference*/
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (result.equals("VALIDATION SUCCESSFULL - 200 OK[]")){
+        if (result.equals("VALIDATION SUCCESSFULL - 200 OK")){
             Toast.makeText(Screen2.this, "Uspesno ste se ulogovali.", Toast.LENGTH_LONG).show();//Izbacuje poruku da vec postoji upisan telefon sa tim kodom, Kod je vec koriscen! 401 UNAUTHORISED
             //Hesiranje
             try {
@@ -168,7 +168,7 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
             //kraj hesiranja
             Intent intent = new Intent(Screen2.this, Screen3.class);//Ako su podaci uspesno dodati Prebacuje na kameru
             startActivity(intent);
-        } else if (result.equals("VALIDATION UNSUCCESSFULL - 401 UNAUTHORISED[]") || result.equals("BAD PARAMETERS! 401 UNAUTHORISED[]")){
+        } else if (result.equals("VALIDATION UNSUCCESSFULL - 401 UNAUTHORISED") || result.equals("BAD PARAMETERS! 401 UNAUTHORISED")){
             String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID); //Uzimanje android ID-a
             HashMap postData = new HashMap();//HashMapa, upisivanje vrednosti
             postData.put("mobile", "android");//Govoris APIJU da se radi o telefonu i da je android
@@ -176,9 +176,9 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
             postData.put("androidID", androidID);//Prosledjujes Apiju androidID-a
 
             PostResponseAsyncTask task = new PostResponseAsyncTask(Screen2.this,postData, Screen2.this);//Putanja za lokalni server
-            task.execute("http://10.0.2.2/CodeWorriors/api.php?apicall=registration");//Putanja za lokalni server
+            task.execute("http://79.175.125.13/cw/api.php?apicall=registration");//Putanja za lokalni server
             minimalniUnos.setText("");
-        } else if (result.equals("200 OK[]")){//Isputuje da li kod vec postoji
+        } else if (result.equals("200 OK")){//Isputuje da li kod vec postoji
             Toast.makeText(Screen2.this, "Uspesno ste dodati.", Toast.LENGTH_LONG).show();//Izbacuje poruku da vec postoji upisan telefon sa tim kodom, Kod je vec koriscen! 401 UNAUTHORISED
             //Hesiranje
             try {
@@ -207,12 +207,12 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
             Intent intent = new Intent(Screen2.this, Screen3.class);//Ako su podaci uspesno dodati Prebacuje na kameru
             startActivity(intent);
         }
-        else if (result.equals(("Code already used! 401 UNAUTHORISED[]")) || result.equals("BAD PARAMETERS! 401 UNAUTHORISED[]")){//Ispituje da li unosi kod u bazu
+        else if (result.equals(("Code already used! 401 UNAUTHORISED")) || result.equals("BAD PARAMETERS! 401 UNAUTHORISED")){//Ispituje da li unosi kod u bazu
             Toast.makeText(Screen2.this, "Kod je vec poseduje drugi korisnik", Toast.LENGTH_SHORT).show();
         }
 
         else{
-            Toast.makeText(Screen2.this, "nesto" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(Screen2.this, "Neuspesna konekcija sa serverom" , Toast.LENGTH_SHORT).show();
         }
 
 
