@@ -94,7 +94,7 @@ if(isset($_GET['apicall'])){
 
 		if(isTheseParametersAvailable(array('kod','androidID', 'image', 'image_name'))){
 			//getting values
-			$kod = md5($_POST['kod']); 
+			$kod = ($_POST['kod']); 
 			$upload_folder = 'http://79.175.125.13/cw/slike'; //drugo moguce resenje /var/www/html/cw/slike
 			$image = $_POST['image'];
 			$image_name = $_POST['image_name'];

@@ -27,15 +27,15 @@
         android:layout_marginTop="8dp"
         android:alpha="0.7"
         android:background="@android:color/transparent"
+        android:onClick="onClickClose"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/button"
         app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/kameraslika2"
-        android:onClick="onClickClose"/>
+        app:srcCompat="@drawable/kameraslika2" />
 
     <ImageButton
         android:id="@+id/button"
