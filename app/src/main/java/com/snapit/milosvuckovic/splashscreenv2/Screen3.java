@@ -43,6 +43,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.snapit.milosvuckovic.splashscreenv2.receiver.ConnectionDetector;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -199,8 +202,7 @@ public class Screen3 extends AppCompatActivity {
                     manager.openCamera(cameraId, mStateCallback, null);
                 } else {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                        Toast.makeText(this,
-                                "No permission to use the camera services", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, "No permission to use the camera services", Toast.LENGTH_SHORT).show();
                     }
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_RESULT);
                 }
@@ -223,7 +225,8 @@ public class Screen3 extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CAMERA_RESULT:
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Cannot run application because camera service permissions have not been granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Snapit zahteva pristup kameri!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 break;
             default:
