@@ -1,9 +1,14 @@
 package com.snapit.milosvuckovic.splashscreenv2;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Matrix;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -17,6 +22,7 @@ import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,6 +30,8 @@ import com.kosalgeek.android.photoutil.ImageBase64;
 import com.kosalgeek.android.photoutil.ImageLoader;
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
+import com.snapit.milosvuckovic.splashscreenv2.receiver.ConnectionDetector;
+import com.snapit.milosvuckovic.splashscreenv2.receiver.NetworkStateChangeReceiver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,6 +39,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
+
+import static com.snapit.milosvuckovic.splashscreenv2.receiver.NetworkStateChangeReceiver.IS_NETWORK_AVAILABLE;
 import static java.lang.System.out;
 public class Screen4 extends AppCompatActivity {
     private Context context= this;
@@ -43,6 +53,7 @@ public class Screen4 extends AppCompatActivity {
     Button upload;
     String putanjaSlikeUKesu;
     String imeSlike;
+    ConnectionDetector cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +74,31 @@ public class Screen4 extends AppCompatActivity {
         pAttacher.update();
         File traziIme = new File(KomprePutanja);
         final String imeSlike= traziIme.getName();
+        ConnectionDetector cd = new ConnectionDetector(this);
+        clearCache();
+        cd = new ConnectionDetector(this);
+        if (cd.isConnected()) {
+            //Nema potrebe da pise da je korisnik konektovan na internetu pri ulasku u app
+        } else {
+            upload.setEnabled(false);
+        }
+        IntentFilter intentFilter = new IntentFilter(NetworkStateChangeReceiver.NETWORK_AVAILABLE_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //unesiKod = (EditText)findViewById(R.id.unesi_kod_polje);
+                boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
+                String networkStatus = isNetworkAvailable ? "ukljucena" : "iskljucena";
+                if(isNetworkAvailable){
+                    upload.setEnabled(true);
+                }else {
+                    upload.setEnabled(false);
+                    Toast.makeText(getApplicationContext(), "Nemate internet konekciju", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, intentFilter);
+
+
 
 
         upload.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +111,8 @@ public class Screen4 extends AppCompatActivity {
                     String verifikacioniKod= sharedPreferences.getString("verifikacioniKod",""); //Citanje verifikacionog koda iz shared preferences
 
                     //Uzimanje naziva slike iz screen3
-                   // Intent intent = getIntent();
-                   // String nazivSlike = intent.getExtras().getString("nazivS");
+                    // Intent intent = getIntent();
+                    // String nazivSlike = intent.getExtras().getString("nazivS");
 
                     Bitmap bitMap= ImageLoader.init().from(KomprePutanja).requestSize(512,512).getBitmap();//Uzimanje slike iz kesa i upis u bitMap
                     String slikaZaSlanje= ImageBase64.encode(bitMap); //kodovanje slike u String
@@ -94,40 +130,38 @@ public class Screen4 extends AppCompatActivity {
                             SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);
                             String verifikacioniKod= sharedPreferences.getString("verifikacioniKod","");
                             if(s.contains("UPLOAD SUCCESSFULL!")){
-                                Toast.makeText(getApplicationContext(),
-                                        "Slika je uspesno poslata na server!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Screen4.this, Screen3.class);
-                                startActivity(intent);
+                                //Alert dijalog koji obavestava da je sika uspesno poslata na server
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Screen4.this);
+                                builder.setTitle("Slika je uspesno poslata na server!")
+                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            //klikom na OK vraca nas na kameru
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                finish();
+
+                                            }
+
+                                        });
+
+                                builder.create().show();
 
                             }else{
-                                Toast.makeText(getApplicationContext(),
-                                        "Problem sa slanjem slike!" + s, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"Problem sa slanjem slike!" + s, Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
                     task.execute(URL);
 
                 }catch(FileNotFoundException e){
-                    Toast.makeText(getApplicationContext(),
-                            "Nesto nije u redu sa kodiranjem slike!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Nesto nije u redu sa kodiranjem slike!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
     public boolean clearCache() {
+
         try {
-            String imeDir = "slike";
-            File Cachedir = new File(getCacheDir().getPath()+"/"+imeDir+"/");
-            File[] files = Cachedir.listFiles();
-            File[] filess = getBaseContext().getCacheDir().listFiles();
-            for (File file : files ) {
-                // delete returns boolean we can use
-                if (!file.delete()) {
-                    return false;
-                }
-            }
-            for (File file : filess ) {
+            File[] files = getBaseContext().getCacheDir().listFiles();
+            for (File file : files) {
                 // delete returns boolean we can use
                 if (!file.delete()) {
                     return false;
@@ -139,8 +173,31 @@ public class Screen4 extends AppCompatActivity {
         // try stops clearing cache
         return false;
     }
+
+
+
+    public boolean clearCacheDir(){
+        try {
+            String imeDir = "slike";
+            File Cachedir = new File(getCacheDir().getPath()+"/"+imeDir+"/");
+            File[] files = Cachedir.listFiles();
+
+            for (File file : files ) {
+                // delete returns boolean we can use
+                if (!file.delete()) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {}
+        // try stops clearing cache
+        return false;
+
+    }
+
     public void onClickClose(View view){
-        clearCache();
+        clearCacheDir();
+
         finish();
     }
     //Izlaz iz aplikacije preko android back dugmeta

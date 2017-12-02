@@ -316,14 +316,11 @@ public class Screen3 extends AppCompatActivity {
                                 .setDestinationDirectoryPath(Cachedir.getAbsolutePath())
                                 .compressToFile(getPictureFile());
                         putanja1=compressedImage.getAbsolutePath();
-                        Log.d("Kompresovana Slika","prikaz putanje "+ compressedImage.getAbsolutePath());
-                        Log.d("Kompresovana Slika","Velicina fajla "+ compressedImage.length()/1024 );
                         output.close();
                         String putanja = getPictureFile().getAbsolutePath();
                         Intent i = new Intent(Screen3.this, Screen4.class);
                         i.putExtra("slika", putanja);
                         i.putExtra("kompresovana", putanja1);
-                        Log.d("Kompresovana slika","preneta putanja "+ putanja1);
                         startActivity(i);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -344,7 +341,7 @@ public class Screen3 extends AppCompatActivity {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(Screen3.this, "Slika Sacuvana", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Screen3.this, "Slika Sacuvana", Toast.LENGTH_SHORT).show();
                     // startPreview(session);
                 }
             };
