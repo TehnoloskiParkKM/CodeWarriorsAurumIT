@@ -92,22 +92,7 @@ public class Screen3 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 butTakePicture.setEnabled(false);
-                if(takePicture(view)) {
-                    //Prelazak na cetvrti skrin
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //String kompresPutanja = compressedImage.getAbsolutePath();
-                            // Log.d("Kompresovana putanja","preneta putanja "+ kompresPutanja);
-                            String putanja = getPictureFile().getAbsolutePath();
-                            Intent i = new Intent(Screen3.this, Screen4.class);
-                            i.putExtra("slika", putanja);
-                            i.putExtra("kompresovana", putanja1);
-                            Log.d("Kompresovana slika","preneta putanja "+ putanja1);
-                            startActivity(i);
-                        }
-                    }, 500);
-                }
+                takePicture(view);
             }
         });
     }
@@ -331,6 +316,12 @@ public class Screen3 extends AppCompatActivity {
                         Log.d("Kompresovana Slika","prikaz putanje "+ compressedImage.getAbsolutePath());
                         Log.d("Kompresovana Slika","Velicina fajla "+ compressedImage.length()/1024 );
                         output.close();
+                        String putanja = getPictureFile().getAbsolutePath();
+                        Intent i = new Intent(Screen3.this, Screen4.class);
+                        i.putExtra("slika", putanja);
+                        i.putExtra("kompresovana", putanja1);
+                        Log.d("Kompresovana slika","preneta putanja "+ putanja1);
+                        startActivity(i);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
