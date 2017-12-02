@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ import java.util.List;
 import id.zelory.compressor.Compressor;
 import static android.bluetooth.BluetoothClass.Service.CAPTURE;
 public class Screen3 extends AppCompatActivity {
+    private Context context= this;
     String imeFajla;
     int velicina;
     String putanja1;
@@ -258,8 +260,9 @@ public class Screen3 extends AppCompatActivity {
     }
     //Add the getPictureFile() method:
     private File getPictureFile() {
+        String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss"). format(System.currentTimeMillis());
-        String fileName = "PHOTO_" + timeStamp + ".jpeg";
+        String fileName = androidID + timeStamp + ".jpeg";
         return new File(getCacheDir(), fileName);
     }
     //Rotacija slike za 90 stepeni ako je potrebno
