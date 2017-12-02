@@ -203,7 +203,7 @@ public class Screen4 extends AppCompatActivity {
     //Izlaz iz aplikacije preko android back dugmeta
     @Override
     public void onBackPressed() {
-        clearCache();
+        clearCacheDir();
         finish();
     }
 }

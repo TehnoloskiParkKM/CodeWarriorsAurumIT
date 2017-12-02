@@ -58,4 +58,10 @@ public class Splash extends AppCompatActivity {
             Toast.makeText(Splash.this, "Internet konekcija: isključena", Toast.LENGTH_SHORT).show();
         }
     }
+    @Override
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
+
+    }
 }
