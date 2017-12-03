@@ -3,9 +3,6 @@
 //getting the database conection
 require_once 'dbconnect.php';
 
-//an array to display response
-//$response = array();
-
 //if it is an api call
 if(isset($_GET['apicall'])){
 
@@ -95,11 +92,18 @@ if(isset($_GET['apicall'])){
 		if(isTheseParametersAvailable(array('kod','androidID', 'image', 'image_name'))){
 			//getting values
 			$kod = ($_POST['kod']); 
-			$upload_folder = 'http://79.175.125.13/cw/slike'; //drugo moguce resenje /var/www/html/cw/slike
 			$image = $_POST['image'];
 			$image_name = $_POST['image_name'];
 			$androidID = $_POST['androidID'];
-			$path = '$upload_folder/$image_name.jpeg'; 
+			$path = 'slike/'.$image_name;
+
+			function base64_to_jpeg($base64_string, $output_file) {
+				$ifp = fopen($output_file, "wb"); 
+				$data = explode(',', $base64_string);
+				fwrite($ifp, base64_decode($data[1])); 
+				fclose($ifp); 
+				return $output_file; 
+			}
 
 			$stmt = $con->prepare("SELECT androidID FROM verifikacijakorisnika WHERE kod = ? AND androidID = ?");
 			$stmt->bind_param("ss",$kod, $androidID);
@@ -107,22 +111,23 @@ if(isset($_GET['apicall'])){
 			$stmt->store_result();
 
 			if($stmt->num_rows > 0){
-				if (file_put_contents($path, base64_decode($image)) != false){
+				
+				if (base64_to_jpeg($image, 'slike/'. $image_name)) {
+					//picture has been successfully uploaded
+					//writing details in the DB
 					$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
 					$stmt->bind_param('sss', $androidID, $image_name, $path);
-
-					//if storing DB is successfull
+					
 					if($stmt->execute()){
 						echo 'UPLOAD SUCCESSFULL';
 					}
 					else{
-						echo 'UPLOAD FAILED';
+						echo 'UPLOAD IMAGE SUCCESSFULL, DB UPDATE FAILED';
 					}
-				}
-				else{
-					//could not store image file_put_contents==false
-					echo 'BAD FOLDER WRITTING - UPLOAD FAILED';
-				}
+
+				} else {
+					echo "UPLOAD UNSUCCESSFULL";
+				}	
 			}
 			else{
 				//if the user not found 
@@ -133,7 +138,7 @@ if(isset($_GET['apicall'])){
 			echo 'BAD PARAMETERS! 401 UNAUTHORISED';
 		}
 
-		break; 
+		break;
 
 		default: 
 		echo 'Invalid Operation Called - 401 UNAUTHORISED';
