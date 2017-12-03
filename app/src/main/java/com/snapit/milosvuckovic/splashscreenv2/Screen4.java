@@ -129,7 +129,7 @@ public class Screen4 extends AppCompatActivity {
                         public void processFinish(String s) {
                             SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);
                             String verifikacioniKod= sharedPreferences.getString("verifikacioniKod","");
-                            if(s.contains("UPLOAD SUCCESSFULL!")){
+                            if(s.contains("UPLOAD SUCCESSFULL")){
                                 //Alert dijalog koji obavestava da je sika uspesno poslata na server
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Screen4.this);
                                 builder.setTitle("Slika je uspesno poslata na server!")
@@ -155,7 +155,7 @@ public class Screen4 extends AppCompatActivity {
                     task.execute(URL);
 
                 }catch(FileNotFoundException e){
-                    Toast.makeText(getApplicationContext(),"Nesto nije u redu sa kodiranjem slike!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Nesto nije u redu sa kodiranjem slike!" , Toast.LENGTH_SHORT).show();
                 }
             }
         });
