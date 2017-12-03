@@ -99,8 +99,7 @@ if(isset($_GET['apicall'])){
 
 			function base64_to_jpeg($base64_string, $output_file) {
 				$ifp = fopen($output_file, "wb"); 
-				$data = explode(',', $base64_string);
-				fwrite($ifp, base64_decode($data[1])); 
+				fwrite($ifp, base64_decode($base64_string)); 
 				fclose($ifp); 
 				return $output_file; 
 			}
@@ -112,7 +111,7 @@ if(isset($_GET['apicall'])){
 
 			if($stmt->num_rows > 0){
 				
-				if (base64_to_jpeg($image, 'slike/'. $image_name)) {
+				if (base64_to_jpeg($image, $path)) {
 					//picture has been successfully uploaded
 					//writing details in the DB
 					$stmt = $con->prepare("INSERT INTO slike (androidID, naziv, putanja) VALUES (?, ?, ?)");
