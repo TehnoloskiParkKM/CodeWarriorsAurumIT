@@ -250,7 +250,7 @@ public class Screen3 extends AppCompatActivity {
     private File getPictureFile() {
         String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss"). format(System.currentTimeMillis());
-        String fileName = androidID + timeStamp + ".jpeg";
+        String fileName = androidID+ "_" + timeStamp + ".jpeg";
         return new File(getCacheDir(), fileName);
     }
     //Rotacija slike za 90 stepeni ako je potrebno
