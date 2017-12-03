@@ -132,12 +132,11 @@ public class Screen4 extends AppCompatActivity {
                             if(s.contains("UPLOAD SUCCESSFULL")){
                                 //Alert dijalog koji obavestava da je sika uspesno poslata na server
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Screen4.this);
-                                builder.setTitle("Slika je uspesno poslata na server!")
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                builder.setCancelable(false);
+                                builder.setTitle("Slika je uspesno poslata na server!").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                             //klikom na OK vraca nas na kameru
                                             public void onClick(DialogInterface dialog, int id) {
                                                 finish();
-
                                             }
 
                                         });
