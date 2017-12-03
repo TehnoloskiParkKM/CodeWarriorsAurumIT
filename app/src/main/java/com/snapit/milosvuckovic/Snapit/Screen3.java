@@ -212,7 +212,9 @@ public class Screen3 extends AppCompatActivity {
             case REQUEST_CAMERA_RESULT:
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Snapit zahteva pristup kameri!", Toast.LENGTH_SHORT).show();
+                    System.exit(0);
                     finish();
+
                 }
                 break;
             default:
@@ -355,4 +357,5 @@ public class Screen3 extends AppCompatActivity {
         finish();
         System.exit(0);
     }
+
 }

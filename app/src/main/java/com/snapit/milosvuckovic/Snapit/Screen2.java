@@ -210,6 +210,11 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
 
 
     }//kraj processFinish metode
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
+
+    }
 
 }
 

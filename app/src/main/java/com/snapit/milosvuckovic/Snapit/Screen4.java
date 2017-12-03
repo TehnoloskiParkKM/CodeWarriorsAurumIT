@@ -109,7 +109,7 @@ public class Screen4 extends AppCompatActivity {
 
                     Bitmap bitMap= ImageLoader.init().from(KomprePutanja).requestSize(680,420).getBitmap();//Uzimanje slike iz kesa i upis u bitMap
                     ByteArrayOutputStream stream= new ByteArrayOutputStream();
-                    bitMap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                    bitMap.compress(Bitmap.CompressFormat.JPEG,70,stream);
                     byte[] array = stream.toByteArray();
                     String slikaZaSlanje= Base64.encodeToString(array,0); //kodovanje slike u String
 
@@ -204,6 +204,7 @@ public class Screen4 extends AppCompatActivity {
     public void onBackPressed() {
         clearCacheDir();
         finish();
+        System.exit(0);
     }
     @Override
     public void onDestroy() {
@@ -211,4 +212,5 @@ public class Screen4 extends AppCompatActivity {
         clearCacheDir();
         clearCache();
     }
+
 }
