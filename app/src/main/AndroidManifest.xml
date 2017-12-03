@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.snapit.milosvuckovic.Snapit.Splash">
+        <activity android:name="com.snapit.milosvuckovic.Snapit.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,13 +24,16 @@
         </activity>
         <activity
             android:name="com.snapit.milosvuckovic.Snapit.Screen2"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateVisible"
+            android:screenOrientation="portrait"
+            />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name="com.snapit.milosvuckovic.Snapit.Screen3" />
+        <activity android:name="com.snapit.milosvuckovic.Snapit.Screen3"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name="com.snapit.milosvuckovic.Snapit.receiver.NetworkStateChangeReceiver"
@@ -39,7 +43,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="com.snapit.milosvuckovic.Snapit.Screen4"></activity>
+        <activity android:name="com.snapit.milosvuckovic.Snapit.Screen4"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

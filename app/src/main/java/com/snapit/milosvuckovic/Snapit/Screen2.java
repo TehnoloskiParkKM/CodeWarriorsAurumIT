@@ -135,7 +135,6 @@ public class Screen2 extends AppCompatActivity implements AsyncResponse, View.On
         SharedPreferences sharedPreferences = getSharedPreferences("Verifikacija", Context.MODE_PRIVATE);   /**stvaranje objekta za deljene preference*/
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (result.equals("VALIDATION SUCCESSFULL - 200 OK")){
-            Toast.makeText(Screen2.this, "Uspesno ste se ulogovali.", Toast.LENGTH_LONG).show();//Izbacuje poruku da vec postoji upisan telefon sa tim kodom, Kod je vec koriscen! 401 UNAUTHORISED
             //Hesiranje
             try {
                 MessageDigest m = MessageDigest.getInstance("MD5");
