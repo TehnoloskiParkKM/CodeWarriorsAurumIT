@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.snapit.milosvuckovic.splashscreenv2">
+    package="com.snapit.milosvuckovic.Snapit">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Splash">
+        <activity android:name="com.snapit.milosvuckovic.Snapit.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,24 +22,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Screen2"
+            android:name="com.snapit.milosvuckovic.Snapit.Screen2"
             android:windowSoftInputMode="stateVisible" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Screen3" />
+        <activity android:name="com.snapit.milosvuckovic.Snapit.Screen3" />
 
         <receiver
-            android:name=".receiver.NetworkStateChangeReceiver"
+            android:name="com.snapit.milosvuckovic.Snapit.receiver.NetworkStateChangeReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Screen4"></activity>
+        <activity android:name="com.snapit.milosvuckovic.Snapit.Screen4"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.snapit.milosvuckovic.splashscreenv2.Screen2"
+    tools:context="com.snapit.milosvuckovic.Snapit.Screen2"
     android:orientation="vertical"
     android:id="@+id/activity_screen2">
 
