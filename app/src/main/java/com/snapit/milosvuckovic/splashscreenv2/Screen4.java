@@ -144,8 +144,11 @@ public class Screen4 extends AppCompatActivity {
 
                                 builder.create().show();
 
-                            }else{
-                                Toast.makeText(getApplicationContext(),"Problem sa slanjem slike!" + s, Toast.LENGTH_SHORT).show();
+                            }else if (s.contains("UPLOAD IMAGE SUCCESSFULL, DB UPDATE FAILED")){
+                                Toast.makeText(getApplicationContext(),"Nije upisana slika u bazi", Toast.LENGTH_SHORT).show();
+                            }else
+                            {
+                                Toast.makeText(getApplicationContext(),"Problem sa konekcijom servera", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
