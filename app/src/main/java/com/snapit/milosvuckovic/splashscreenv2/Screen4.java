@@ -209,4 +209,10 @@ public class Screen4 extends AppCompatActivity {
         clearCacheDir();
         finish();
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        clearCacheDir();
+        clearCache();
+    }
 }
