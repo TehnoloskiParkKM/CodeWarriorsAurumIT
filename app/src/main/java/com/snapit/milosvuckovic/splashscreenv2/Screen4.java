@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
@@ -114,8 +115,12 @@ public class Screen4 extends AppCompatActivity {
                     // Intent intent = getIntent();
                     // String nazivSlike = intent.getExtras().getString("nazivS");
 
-                    Bitmap bitMap= ImageLoader.init().from(KomprePutanja).requestSize(512,512).getBitmap();//Uzimanje slike iz kesa i upis u bitMap
-                    String slikaZaSlanje= ImageBase64.encode(bitMap); //kodovanje slike u String
+                    Bitmap bitMap= ImageLoader.init().from(KomprePutanja).requestSize(680,420).getBitmap();//Uzimanje slike iz kesa i upis u bitMap
+                    ByteArrayOutputStream stream= new ByteArrayOutputStream();
+                    bitMap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                    byte[] array = stream.toByteArray();
+                    String slikaZaSlanje= Base64.encodeToString(array,0); //kodovanje slike u String
+
                     // Log.d.(TAG, encodedImage);
 
                     HashMap<String, String> postData=new HashMap<String, String>();
