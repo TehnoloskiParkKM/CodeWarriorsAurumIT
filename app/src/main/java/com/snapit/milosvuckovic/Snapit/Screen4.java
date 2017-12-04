@@ -49,6 +49,11 @@ public class Screen4 extends AppCompatActivity {
     ConnectionDetector cd;
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        clearCacheDir();
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen4);
@@ -192,7 +197,6 @@ public class Screen4 extends AppCompatActivity {
         } catch (Exception e) {}
         // try stops clearing cache
         return false;
-
     }
 
     public void onClickClose(View view){
@@ -205,12 +209,6 @@ public class Screen4 extends AppCompatActivity {
         clearCacheDir();
         finish();
         System.exit(0);
-    }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        clearCacheDir();
-        clearCache();
     }
 
 }
