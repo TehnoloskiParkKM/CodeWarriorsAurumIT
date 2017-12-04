@@ -87,7 +87,7 @@ public class Screen3 extends AppCompatActivity {
     }
     //izlazak iz aplikacije
     public void onClickClose(View view) {
-        finish();
+        finishAffinity();
         System.exit(0);
     }
     //Add the  following Comparator class
@@ -211,10 +211,8 @@ public class Screen3 extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CAMERA_RESULT:
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Snapit zahteva pristup kameri!", Toast.LENGTH_SHORT).show();
+                    finishAffinity();
                     System.exit(0);
-                    finish();
-
                 }
                 break;
             default:

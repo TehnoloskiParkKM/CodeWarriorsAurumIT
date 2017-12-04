@@ -134,6 +134,7 @@ public class Screen4 extends AppCompatActivity {
                                             //klikom na OK vraca nas na kameru
                                             public void onClick(DialogInterface dialog, int id) {
                                                 finish();
+                                                clearCacheDir();
                                             }
 
                                         });
@@ -196,7 +197,6 @@ public class Screen4 extends AppCompatActivity {
 
     public void onClickClose(View view){
         clearCacheDir();
-
         finish();
     }
     //Izlaz iz aplikacije preko android back dugmeta
